@@ -8,8 +8,10 @@
       <div class="select-favorites">
         <div class="form-label-name">选择收藏夹</div>
         <div class="erc721-list">
-          <div class="create-erc721" v-bind="attrs" v-on="on">
-            <v-btn fab small><v-icon> mdi-plus </v-icon></v-btn>
+          <div class="create-erc721" @click="createErc721">
+            <v-btn fab small class="create-btn"
+              ><v-icon> mdi-plus </v-icon></v-btn
+            >
             <div class="create-erc721-description">创建</div>
             <div class="create-erc721-name">ERC-721</div>
           </div>
@@ -53,77 +55,82 @@
       <v-btn class="mr-4" type="submit" color="primary"> submit </v-btn>
       <v-btn @click="clear"> clear </v-btn>
     </v-form>
-    <v-dialog v-model="dialog" persistent max-width="600px">
+    <v-dialog v-model="dialog" persistent max-width="380px">
       <v-card>
         <v-card-title>
-          <span class="headline">User Profile</span>
+          <span class="headline">Collection</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field label="Legal first name*" required></v-text-field>
+              <v-col cols="12" md="4" sm="4">
+                <img :src="imgUrl" alt="" class="collection-img-preview" />
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" md="8" sm="8">
+                <v-row>
+                  <v-col cols="12"
+                    ><div>
+                      We recommend an image of at least 400*400. Gifs work too
+                    </div></v-col
+                  >
+                  <v-col cols="12"
+                    ><!-- <v-file-input
+                      ref="file"
+                      style="display: none"
+                      hide-input
+                      accept="image/*"
+                      label="Choose File"
+                      prepend-icon="mdi-camera"
+                    ></v-file-input> -->
+                    <input
+                      ref="file"
+                      type="file"
+                      style="display: none"
+                      accept="image/png, image/jpeg"
+                      @change="verificationPicFile(this)"
+                    />
+                    <v-btn color="primary" @click="chooseFile"
+                      >Choose File
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row align="center">
+              <v-col cols="12">
                 <v-text-field
-                  label="Legal middle name"
-                  hint="example of helper text only on focus"
+                  label="Display name"
+                  required
+                  hint="Token name cannnot be changed in future"
+                  persistent-hint
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12">
+                <v-text-field label="Symbol"></v-text-field>
+              </v-col>
+              <v-col cols="12">
                 <v-text-field
-                  label="Legal last name*"
-                  hint="example of persistent helper text"
+                  label="description"
+                  hint="Spread some words about your token collection"
                   persistent-hint
                   required
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Email*" required></v-text-field>
-              </v-col>
-              <v-col cols="12">
                 <v-text-field
-                  label="Password*"
-                  type="password"
+                  label="Short url"
                   required
+                  hint="Will be used as public URL"
+                  persistent-hint
                 ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
-                  label="Age*"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-autocomplete
-                  :items="[
-                    'Skiing',
-                    'Ice hockey',
-                    'Soccer',
-                    'Basketball',
-                    'Hockey',
-                    'Reading',
-                    'Writing',
-                    'Coding',
-                    'Basejump',
-                  ]"
-                  label="Interests"
-                  multiple
-                ></v-autocomplete>
               </v-col>
             </v-row>
           </v-container>
-          <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Close
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Save
-          </v-btn>
+          <v-btn color="grey darken-1" @click="dialog = false"> Cancel </v-btn>
+          <v-btn color="blue darken-1"> Create favorites </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -145,10 +152,52 @@ export default {
       optionalRules: [],
       royalty: 10,
       dialog: false,
+      imgUrl: '',
     }
   },
   methods: {
     clear() {},
+    createErc721() {
+      this.dialog = true
+    },
+    chooseFile() {
+      this.$refs.file.click()
+    },
+    verificationPicFile() {
+      const file = this.$refs.file
+      const filePath = file.value
+      console.log(filePath)
+      const ctx = this
+      if (filePath) {
+        const filePic = file.files[0]
+        console.log(filePic)
+        const maxFileSize = 500
+        if (filePic.size / 1024 > maxFileSize) {
+          file.value = ''
+          console.log('文件大小不能超过500kb')
+          return false
+        }
+        const reader = new FileReader()
+        reader.onload = function (e) {
+          console.log(e)
+          const data = e.target.result
+          console.log(data)
+          const image = new Image()
+          image.onload = function () {
+            const width = image.width
+            const height = image.height
+            if (width < 400 || height < 400) {
+              file.value = ''
+              console.log('图片尺寸不符')
+              return false
+            }
+          }
+          image.src = data
+          ctx.imgUrl = data
+        }
+        reader.readAsDataURL(filePic)
+      }
+    },
   },
 }
 </script>
@@ -183,10 +232,17 @@ export default {
   opacity: 0.6;
 }
 .create-btn {
+  height: 40px !important;
   img {
     width: 40px;
     height: 40px;
     border-radius: 100%;
   }
+}
+.collection-img-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  background: red;
 }
 </style>

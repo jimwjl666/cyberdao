@@ -1,67 +1,55 @@
 <template>
   <v-app dark>
     <v-app-bar fixed app class="top-bar">
-      <v-bottom-navigation
-        :value="value"
-        color="primary"
-        style="positon: fixed; left: 0; top: 0"
-      >
-        <div class="search">
-          <v-text-field
-            label="Search by creator,collectible or collection"
-            prepend-inner-icon="mdi-magnify"
-            hide-details="true"
-          ></v-text-field>
-        </div>
+      <div class="top-img-wrap">
+        <img src="~/assets/logo.svg" type="image/svg+xml" class="top-logo" />
+        <h2 class="top-logo-sub">CyberDAO</h2>
+      </div>
 
-        <v-btn>
-          <span>Explore</span>
-        </v-btn>
-
-        <v-btn>
-          <span>My items</span>
-        </v-btn>
-
-        <v-btn>
-          <span>Following</span>
-        </v-btn>
-
-        <v-btn>
-          <span>How it works</span>
-        </v-btn>
-        <v-spacer></v-spacer>
-
-        <v-btn rounded to="/create">Create</v-btn>
-
-        <v-btn v-if="web3.isConnected" @click="toggleDrawer"
-          ><span>{{ simpleAddress }}</span>
-        </v-btn>
-
-        <v-btn v-if="!web3.isConnected" rounded @click="connectWallet"
-          >Connect wallet</v-btn
+      <v-tabs dark align-with-title color="rgb(214 164 133)" class="nav-tabs">
+        <v-tabs-slider color="rgb(214 164 133)"></v-tabs-slider>
+        <v-tab @click="nav('/')"> Home </v-tab>
+        <v-tab @click="nav('swap')"> Exchange </v-tab>
+        <v-tab> News </v-tab>
+      </v-tabs>
+      <v-spacer></v-spacer>
+      <div class="right-operate-btn--wrap">
+        <v-btn to="/mint"><v-icon left> mdi-pencil </v-icon>Create</v-btn>
+        <v-btn v-if="!web3.isConnected" @click="connectWallet"
+          ><v-icon left>mdi-transit-connection-variant</v-icon> Connect
+          wallet</v-btn
         >
-      </v-bottom-navigation>
+        <div v-if="web3.isConnected" class="account-btn-wrap">
+          <span class="account-coins-balance">0 BNB</span>
+          <v-btn
+            ><span>{{ simpleAddress }}</span>
+          </v-btn>
+        </div>
+        <v-btn v-if="web3.isConnected" fab small @click="toggleDrawer"
+          ><v-icon>mdi-cog-outline</v-icon></v-btn
+        >
+      </div>
       <v-navigation-drawer
         fixed
         right
-        width="200"
-        height="300px"
+        width="300"
+        height="400"
         :value="isShowDrawer"
         style="top: 64px"
       >
-        <div class="drawer-address">{{ simpleAddress }}</div>
-        <div class="balance-wrap">
-          <div class="balance-title">
-            Balance <span>{{ web3.balance }} ETH</span>
+        <v-card class="drawer-wrap">
+          <div class="drawer-address">address:{{ simpleAddress }}</div>
+          <div class="balance-wrap">
+            <div class="balance-title">
+              Balance: <span>{{ web3.balance }} ETH</span>
+            </div>
           </div>
-
-          <!--    <div class="balance-content"></div> -->
           <div class="drawer-settings">
-            <v-btn block small @click="disConnect"
+            <v-btn block small color="rgb(117, 77, 56)" @click="disConnect"
               ><span text-all-caps="false"> Disconnect</span>
             </v-btn>
           </div>
-        </div>
+        </v-card>
       </v-navigation-drawer>
     </v-app-bar>
     <v-main>
@@ -108,11 +96,14 @@ export default {
       }
     },
     disConnect() {
-      console.log(this.web3Instance)
       this.setWeb3({ ...this.web3, isConnected: false })
+      this.isShowDrawer = false
     },
     toggleDrawer() {
       this.isShowDrawer = !this.isShowDrawer
+    },
+    nav(routePath) {
+      this.$router.push(routePath)
     },
   },
 }
@@ -120,11 +111,10 @@ export default {
 <style lang="scss">
 .v-toolbar__content,
 .v-toolbar__extension {
-  padding: 0;
+  padding: 0 !important;
+  width: 100%;
 }
-.v-btn {
-  text-transform: none;
-}
+
 .description {
   padding-top: 40px;
   opacity: 0.7;
@@ -136,40 +126,85 @@ export default {
 .cyberx-title {
   padding-top: 20px;
 }
+.v-btn {
+  text-transform: none !important;
+}
+.top-logo {
+  background: #d6a485;
+  border-radius: 50%;
+}
 </style>
 <style lang="scss" scoped>
+$basic-theme-color: rgb(117, 77, 56);
+.v-btn {
+  text-transform: none !important;
+
+  font-size: 16px;
+}
 .top-bar {
   box-shadow: none !important;
   background: none;
   padding: 0;
+  display: flex;
 }
-.search {
-  width: 500px;
-  padding-left: 50px;
-  transform: translateY(10px);
+.top-img-wrap {
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
 }
-.v-item-group.v-bottom-navigation {
-  justify-content: left;
-  height: 64px !important;
+
+.top-logo-sub {
+  padding-left: 10px;
 }
+
 .center-conent-container {
   width: 100%;
-  padding-top: 40px;
+  padding-top: 0px;
 }
 .v-btn__content {
   justify-content: left !important;
+  color: rgb(117, 77, 56) !important;
 }
-/* .header {
-  width: 100%;
+.v-item-group.v-bottom-navigation .v-btn {
+  font-size: 16px !important;
 }
-.header-wrap {
-  list-style: none;
+.nav-tabs {
+  flex: 1;
+}
+.right-operate-btn--wrap {
   display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-right: 10px;
 }
-.header-wrap-item {
-  width: 150px;
+.account-btn-wrap {
+  height: 40px;
+  background-color: $basic-theme-color;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 10px;
+  margin-left: 20px;
 }
-.header-wrap-item--search {
-  width: 300px;
-} */
+.account-coins-balance {
+  padding: 0 10px;
+}
+.drawer-wrap {
+  padding: 10px;
+  height: 100%;
+  position: relative;
+}
+.drawer-settings {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+}
+.drawer-address,
+.balance-wrap {
+  padding-top: 10px;
+}
 </style>

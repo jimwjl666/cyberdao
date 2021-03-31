@@ -23,7 +23,7 @@
               </v-card>
             </v-item>
           </v-col>
-          <v-col cols="12" sm="12" lg="6" class="card-item">
+          <!-- <v-col cols="12" sm="12" lg="6" class="card-item">
             <v-item>
               <v-card
                 class="d-flex align-center create-item"
@@ -35,7 +35,7 @@
                 <div>Multiple</div>
               </v-card>
             </v-item>
-          </v-col>
+          </v-col> -->
         </v-row>
       </div>
     </v-item-group>
