@@ -79,6 +79,7 @@
         class="mr-4"
         color="rgb(117, 77, 56)"
         :disabled="!valid"
+        :loading="submitLoading"
         @click="submit"
       >
         submit
@@ -88,7 +89,11 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+import { Abi } from '~/contracts/testAbi'
 const reUrl = /^(((ht|f)tps?):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/
+const uploadUrl = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
+const contractAddress = '0xb720056B08f07CEb5f00114cE9d9ACBDa2dbfB4D'
 export default {
   data() {
     return {
@@ -115,16 +120,53 @@ export default {
       ],
       introduction: '',
       introductionRules: [(v) => v.length <= 500 || 'Max 500 characters'],
+      submitLoading: false,
     }
   },
+  computed: {
+    ...mapState(['web3Instance', 'web3']),
+  },
   methods: {
-    submit() {
+    async submit() {
       this.$refs.form.validate()
       if (!this.imgUrl) {
         this.isShowAlert = true
+        return
       }
+      // upload file
+
+      const file = this.$refs.file.files[0]
+      this.submitLoading = true
+      const res = await this.uploadToIPFS(file)
+      this.submitLoading = false
+      const picHash = res.data.IpfsHash
+      console.log(res, picHash)
+
+      // picUrl https://gateway.pinata.cloud/ipfs/QmRP5uqzptHXbdv9U6A7K1j87ErxqaYf94g1ynPZWBUzKS
+      // call contract
+      console.log(Abi)
+      const contract = new this.web3Instance.eth.Contract(Abi, contractAddress)
+      const from = this.web3.account
+      console.log(from)
+      const contractRes = await contract.methods.store(10).send({ from })
+      console.log(contractRes)
     },
     clear() {},
+    uploadToIPFS(file) {
+      const axios = this.$axios
+      const data = new FormData()
+      data.append('file', file)
+      const options = {
+        maxBodyLength: 'Infinity',
+        headers: {
+          'Content-Type': `multipart/form-data;boundary=${data._boundary}`,
+          pinata_api_key: 'c85590da62d9ebc8b93f',
+          pinata_secret_api_key:
+            '30a5ed29f8b97e8e17f73a332bd67b8ce74ec4ce6f1a2ea82899acb7d6e63789',
+        },
+      }
+      return axios.post(uploadUrl, data, options)
+    },
     createErc721() {
       this.dialog = true
     },
@@ -147,9 +189,7 @@ export default {
         }
         const reader = new FileReader()
         reader.onload = function (e) {
-          console.log(e)
           const data = e.target.result
-          console.log(data)
           const image = new Image()
           image.onload = function () {
             const width = image.width

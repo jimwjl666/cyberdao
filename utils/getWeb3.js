@@ -7,7 +7,7 @@ const getWeb3 = function () {
     window.addEventListener('load', function () {
       let results
       let web3 = window.web3
-
+      console.log('web3.currentProvider', web3.currentProvider)
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (typeof web3 !== 'undefined') {
         // Use Mist/MetaMask's provider.
@@ -21,10 +21,9 @@ const getWeb3 = function () {
 
         resolve(results)
       } else {
-        // Fallback to localhost if no web3 injection. We've configured this to
-        // use the development console's port by default.
+        console.log('coming in')
         const provider = new Web3.providers.HttpProvider(
-          'http://127.0.0.1:9545'
+          'http://127.0.0.1:7545'
         )
 
         web3 = new Web3(provider)

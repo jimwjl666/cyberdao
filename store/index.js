@@ -25,11 +25,8 @@ export const mutations = {
   },
 }
 export const actions = {
-  initWeb3({ commit }) {
-    console.log(111)
-    getWeb3().then((value) => {
-      console.log(value)
-      commit('setWeb3Instance', value.web3)
-    })
+  async initWeb3({ commit }) {
+    const res = await getWeb3()
+    commit('setWeb3Instance', res.web3)
   },
 }
