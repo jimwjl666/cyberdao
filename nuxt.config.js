@@ -1,13 +1,13 @@
 import colors from 'vuetify/es5/util/colors'
-
+console.log(process.env.NODE_ENV)
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - cyberx',
-    title: 'cyberx',
+    titleTemplate: '%s - cyberDAO',
+    title: 'cyberDAO',
     htmlAttrs: {
       lang: 'en',
     },
@@ -18,12 +18,20 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-
+  publicRuntimeConfig: {
+    axios: {
+      baseURL: process.env.APIHOST,
+    },
+  },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@plugins/clipboard'],
+  plugins: [
+    '@plugins/clipboard',
+    '@plugins/vue-notifications',
+    '@plugins/axios',
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

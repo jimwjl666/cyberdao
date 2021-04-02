@@ -14,7 +14,9 @@
       </v-tabs>
       <v-spacer></v-spacer>
       <div class="right-operate-btn--wrap">
-        <v-btn to="/mint"><v-icon left> mdi-pencil </v-icon>Create NFT</v-btn>
+        <v-btn v-if="web3.isConnected" to="/mint"
+          ><v-icon left> mdi-pencil </v-icon>Create NFT</v-btn
+        >
         <v-btn v-if="!web3.isConnected" @click="showConnectDialog"
           ><v-icon left>mdi-transit-connection-variant</v-icon> Connect
           wallet</v-btn

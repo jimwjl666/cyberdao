@@ -1,6 +1,7 @@
 <template>
   <v-item-group class="index-list-container">
     <h2 class="crberx-title">Data Summary</h2>
+
     <div class="summary-container">
       <v-row>
         <v-col md="8" sm="6">
@@ -124,13 +125,11 @@
 </template>
 
 <script>
-/* import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue' */
-
 export default {
-  components: {
-    /*  Logo,
-    VuetifyLogo, */
+  components: {},
+  created() {
+    console.log(process.env.NODE_ENV)
+    console.log(this.$config)
   },
 }
 </script>
