@@ -14,17 +14,14 @@ export default function ({ $axios, redirect }) {
       data.token = 'sss2'
       config.data = data
     } */
-    console.log(config)
     console.log('Making request to ' + config.url)
   })
   $axios.onResponse((response) => {
-    console.log(response)
     if (response.data.success === false) {
       console.log('request error')
       return
     }
-    console.log(response)
-    return response
+    return response.data
   })
   $axios.onError((error) => {
     // const code = parseInt(error.response && error.response.status)

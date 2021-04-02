@@ -31,6 +31,8 @@ export default {
     '@plugins/clipboard',
     '@plugins/vue-notifications',
     '@plugins/axios',
+    '@plugins/api',
+    '@plugins/filter',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -51,7 +53,16 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    proxy: true,
+    prefix: '/api/',
+  },
+
+  proxy: {
+    '/api/': {
+      target: 'https://www.bakeryswap.org',
+    },
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
