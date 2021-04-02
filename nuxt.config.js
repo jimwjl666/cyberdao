@@ -23,7 +23,12 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@plugins/clipboard'],
+  plugins: [
+    '@plugins/clipboard',
+    '@plugins/api',
+    '@plugins/axios',
+    '@plugins/filter',
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -43,7 +48,16 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    proxy: true,
+    prefix: '/api/',
+  },
+
+  proxy: {
+    '/api/': {
+      target: 'https://www.bakeryswap.org',
+    },
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
