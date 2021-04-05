@@ -1,5 +1,9 @@
 import Vue from 'vue'
-import { toThousands, toRate } from '@/utils/common'
+import { toThousands, toRate, formatEth, formatAddress } from '@/utils/common'
+
+Vue.filter('formatEth', function (value) {
+  return formatEth(value)
+})
 
 Vue.filter('toThousand', function (value, num) {
   if (typeof num === 'number') {
@@ -31,4 +35,8 @@ Vue.filter('toFixed1', function (value) {
 Vue.filter('toFixed', function (value, num) {
   if (!value || parseFloat(value) === 0) return 0
   return parseFloat(value).toFixed(num)
+})
+
+Vue.filter('formatAddress', function (value) {
+  return formatAddress(value)
 })

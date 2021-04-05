@@ -1,0 +1,20 @@
+.v-btn:not(.v-btn--round).v-size--default {
+  height: 38px !important;
+  min-width: 100px !important;
+}
+
+.v-btn {
+  font-weight: normal !important;
+}
+
+.v-btn.v-size--large {
+  min-width: 120px !important;
+}
+
+.theme--dark.v-application {
+  background: $color-black !important;
+}
+
+.theme--dark.v-btn.v-btn--has-bg {
+  color: $color-black !important;
+}

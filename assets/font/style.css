@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'AlfaSlabOne-regular';
+  src: url('./AlfaSlabOne-Regular_1.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'ProximaNova-Bold';
+  src: url('./Proxima Nova Bold.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'ProximaNova-Regular';
+  src: url('./ProximaNova-Regular.otf') format('truetype');
+}

@@ -1,4 +1,5 @@
 import miniToastr from 'mini-toastr'
+
 export default function ({ $axios, redirect }) {
   $axios.onRequest((config) => {
     // 向请求头中塞入 token
@@ -17,11 +18,11 @@ export default function ({ $axios, redirect }) {
     console.log('Making request to ' + config.url)
   })
   $axios.onResponse((response) => {
-    if (response.data.success === false) {
-      console.log('request error')
-      return
+    console.log(response.data)
+    if (response.data.code === 0 || response.data.IpfsHash) {
+      return response.data
     }
-    return response.data
+    miniToastr.error(response.msg, 'request error')
   })
   $axios.onError((error) => {
     // const code = parseInt(error.response && error.response.status)

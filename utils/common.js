@@ -1,3 +1,18 @@
+import BigNumber from 'bignumber.js'
+import config from '@/config'
+
+/**
+ * @returns {string}
+ */
+export function formatEth(value) {
+  if (!value || isNaN(value)) return value
+  let num = new BigNumber(value).div(config.accuracy).toString()
+  if (num < 0.1) {
+    num = scientificNotationToString(num)
+  }
+  return num
+}
+
 /**
  * @returns {string}
  */
@@ -57,4 +72,41 @@ export function dealWords(string) {
     }
   }
   return arr.join(' ')
+}
+
+/**
+ * @returns {string}
+ */
+export function formatAddress(address) {
+  if (address) {
+    return address.toString().replace(/(\S{8})\S{26}(\S{8})/, '$1...$2')
+  }
+}
+
+/**
+ * @returns {string}
+ */
+export function toSecond(value) {
+  if (value) {
+    return Number(value) * 10 ** 3
+  }
+}
+
+function scientificNotationToString(param) {
+  const strParam = String(param)
+  const flag = /e/.test(strParam)
+  if (!flag) return param
+
+  let sysbol = true
+  if (/e-/.test(strParam)) {
+    sysbol = false
+  }
+  const index = Number(strParam.match(/\d+$/)[0])
+  const basis = strParam.match(/^[\d/./]+/)[0].replace(/\./, '')
+
+  if (sysbol) {
+    return basis.padEnd(index + 1, 0)
+  } else {
+    return basis.padStart(index + basis.length, 0).replace(/^0/, '0.')
+  }
 }

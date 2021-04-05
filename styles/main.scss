@@ -1,0 +1,106 @@
+@import '../assets/variables.scss';
+@import './overwrite.scss';
+@import '../assets/style.css';
+@import '../assets/font/style.css';
+
+body,
+.v-application {
+  font-family: pn-regular, Helvetica, Arial, sans-serif !important;
+  color: $color-white;
+  background-color: $color-black;
+  font-size: 14px;
+  line-height: 1.35 !important;
+}
+
+//------------------- text-color
+.text-primary {
+  color: $color-primary !important;
+}
+
+.text-gray {
+  color: $color-gray !important;
+}
+
+//------------------- background-color
+.bg-white {
+  background-color: $color-white !important;
+}
+
+.bg-dark {
+  background-color: $color-dark !important;
+}
+
+.bg-gray {
+  background-color: $color-gray !important;
+}
+
+//------------------- font-size
+.font-40 {
+  font-size: 40px;
+}
+
+.font-24 {
+  font-size: 24px;
+}
+
+.font-12 {
+  font-size: 12px;
+}
+
+.font-13 {
+  font-size: 13px;
+}
+
+.font-20 {
+  font-size: 20px;
+}
+
+.font-18 {
+  font-size: 18px;
+}
+
+//------------------- font-family
+.font-title {
+  font-family: AlfaSlabOne-regular !important;
+}
+
+.font-bold {
+  font-family: ProximaNova-Bold !important;
+}
+
+.font-regular {
+  font-family: ProximaNova-Regular !important;
+}
+
+// ------------------ other
+.c-pointer {
+  cursor: pointer;
+}
+
+.border {
+  border: 1px solid $color-primary !important;
+}
+
+.p {
+  &-absolute {
+    position: absolute !important;
+  }
+
+  &-relative {
+    position: relative !important;
+  }
+
+  &-zoom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0
+  }
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

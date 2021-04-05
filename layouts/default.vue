@@ -2,39 +2,39 @@
   <v-app dark>
     <v-app-bar fixed app class="top-bar">
       <div class="top-img-wrap">
-        <img src="~/assets/logo.svg" type="image/svg+xml" class="top-logo" />
-        <h2 class="top-logo-sub">CyberDAO</h2>
+        <img src="~/assets/images/logo_nav.png" class="top-logo" />
       </div>
 
-      <v-tabs dark align-with-title color="rgb(214 164 133)" class="nav-tabs">
-        <v-tabs-slider color="rgb(214 164 133)"></v-tabs-slider>
+      <v-tabs dark align-with-title class="nav-tabs">
         <v-tab @click="nav('/')"> Home </v-tab>
-        <v-tab @click="nav('swap')"> Exchange </v-tab>
-        <v-tab> News </v-tab>
+        <v-tab @click="nav('/swap')"> Exchange </v-tab>
+        <v-tab @click="nav('/artworks')"> NFT&nbsp;Market </v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
       <div class="right-operate-btn--wrap">
-        <v-btn v-if="web3.isConnected" to="/mint"
-          ><v-icon left> mdi-pencil </v-icon>Create NFT</v-btn
-        >
-        <v-btn v-if="!web3.isConnected" @click="showConnectDialog"
-          ><v-icon left>mdi-transit-connection-variant</v-icon> Connect
-          wallet</v-btn
+        <v-btn v-if="web3.isConnected" to="/mint">Create</v-btn>
+        <v-btn
+          v-if="!web3.isConnected"
+          color="primary"
+          @click="showConnectDialog"
+          >Connect wallet</v-btn
         >
         <div v-if="web3.isConnected" class="account-btn-wrap">
-          <span class="account-coins-balance">0 BNB</span>
-          <v-btn @click="showAccountdialog"
-            ><span>{{ simpleAddress }}</span>
-          </v-btn>
+          <span class="account-coins-balance"
+            >{{ web3.balance | formatEth }} ETH</span
+          >
+          <nuxt-link to="/space" tag="v-btn">
+            <span>{{ simpleAddress }}</span>
+          </nuxt-link>
         </div>
-        <v-btn
+        <!-- <v-btn
           v-if="web3.isConnected"
           class="account-setting-btn"
           fab
           small
           @click="toggleDrawer"
           ><v-icon>mdi-cog-outline</v-icon></v-btn
-        >
+        > -->
       </div>
       <v-navigation-drawer
         fixed
@@ -248,10 +248,6 @@ export default {
 .v-btn {
   text-transform: none !important;
 }
-.top-logo {
-  background: #d6a485;
-  border-radius: 50%;
-}
 /* dialog-common */
 .dialog-card-content {
   padding-bottom: 10px;
@@ -276,7 +272,7 @@ $basic-dialog-bg: rgb(50, 41, 37);
 }
 .top-bar {
   box-shadow: none !important;
-  background: none;
+  background: $color-black !important;
   padding: 0;
   display: flex;
 }
@@ -292,6 +288,8 @@ $basic-dialog-bg: rgb(50, 41, 37);
 
 .center-conent-container {
   width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
   padding-top: 0px;
 }
 .v-btn__content {
@@ -302,7 +300,7 @@ $basic-dialog-bg: rgb(50, 41, 37);
   font-size: 16px !important;
 }
 .nav-tabs {
-  flex: 1;
+  // flex: 1;
 }
 .right-operate-btn--wrap {
   display: flex;

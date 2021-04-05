@@ -24,7 +24,7 @@ export default {
     },
   },
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['@styles/main.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -33,6 +33,8 @@ export default {
     '@plugins/axios',
     '@plugins/api',
     '@plugins/filter',
+    '@plugins/components',
+    '@plugins/functions',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -60,7 +62,7 @@ export default {
 
   proxy: {
     '/api/': {
-      target: 'https://www.bakeryswap.org',
+      target: 'https://cyberdao.io/',
     },
   },
 
@@ -71,7 +73,7 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
+          primary: '#FFAE00',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
