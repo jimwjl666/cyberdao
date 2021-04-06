@@ -311,14 +311,12 @@ export default {
         const hasSuffix = Object.keys(picMap).some((suffix) => {
           return filePic.name.toLowerCase().endsWith(`.${suffix}`)
         })
-        console.log(hasSuffix)
         if (!hasSuffix) {
           this.showUploadError({ message: '文件类型不支持' })
           return false
         }
         const arr = filePic.name.split('.')
         this.fileType = picMap[arr[arr.length - 1]]
-        console.log(this.fileType)
         const maxFileSize = 10 * 1024
         if (filePic.size / 1024 > maxFileSize) {
           file.value = ''
@@ -341,11 +339,10 @@ export default {
           image.src = data
           ctx.imgUrl = data
 
-          // this.imgLoading = true
-          // const { IpfsHash } = await this.uploadToIPFS(file.files[0])
-          // this.IpfsHash = IpfsHash
-          // this.imgLoading = false
-          await 1
+          this.imgLoading = true
+          const { IpfsHash } = await this.uploadToIPFS(file.files[0])
+          this.IpfsHash = IpfsHash
+          this.imgLoading = false
         }
         reader.readAsDataURL(filePic)
       }
