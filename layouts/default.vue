@@ -12,7 +12,7 @@
       </v-tabs>
       <v-spacer></v-spacer>
       <div class="right-operate-btn--wrap">
-        <v-btn v-if="web3.isConnected" to="/mint">Create</v-btn>
+        <v-btn v-if="web3.isConnected" to="/mint" color="white">Create</v-btn>
         <v-btn
           v-if="!web3.isConnected"
           color="primary"
@@ -23,7 +23,7 @@
           <span class="account-coins-balance"
             >{{ web3.balance | formatEth }} ETH</span
           >
-          <nuxt-link to="/space" tag="v-btn">
+          <nuxt-link to="/space" tag="v-btn" class="account-address">
             <span>{{ simpleAddress }}</span>
           </nuxt-link>
         </div>
@@ -299,9 +299,6 @@ $basic-dialog-bg: rgb(50, 41, 37);
 .v-item-group.v-bottom-navigation .v-btn {
   font-size: 16px !important;
 }
-.nav-tabs {
-  // flex: 1;
-}
 .right-operate-btn--wrap {
   display: flex;
   height: 100%;
@@ -319,6 +316,9 @@ $basic-dialog-bg: rgb(50, 41, 37);
   padding-right: 5px;
   border-radius: 10px;
   margin-left: 10px;
+}
+.account-address {
+  background-color: #ffae00 !important;
 }
 .account-setting-btn {
   margin-left: 10px;

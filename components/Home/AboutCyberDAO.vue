@@ -11,7 +11,7 @@
     </p>
 
     <div class="d-flex mr-n5 mb-16">
-      <div v-for="item in list" :key="item.name" class="about-cbd__item">
+      <div v-for="item in list" :key="item.id" class="about-cbd__item">
         <div class="about-cbd__item--pic">
           <img :src="require(`@/assets/images/${item.img}`)" alt="item.name" />
         </div>
@@ -26,10 +26,10 @@ export default {
   data() {
     return {
       list: [
-        { name: '流动性挖矿', img: 'icon_1.svg' },
-        { name: '流动性挖矿', img: 'icon_2.svg' },
-        { name: '流动性挖矿', img: 'icon_3.svg' },
-        { name: '流动性挖矿', img: 'icon_4.svg' },
+        { id: 1, name: '流动性挖矿', img: 'icon_1.svg' },
+        { id: 2, name: '流动性挖矿', img: 'icon_2.svg' },
+        { id: 3, name: '流动性挖矿', img: 'icon_3.svg' },
+        { id: 4, name: '流动性挖矿', img: 'icon_4.svg' },
       ],
     }
   },

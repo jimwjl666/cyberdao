@@ -188,24 +188,13 @@ export default {
       ],
       link: '',
       linkRules: [
-        (v) => {
-          if (v) {
-            return (
-              (v && reUrl.test(v) && v.length >= 5 && v.length <= 500) ||
-              'link must be the URL of the rule'
-            )
-          }
-        },
+        (v) =>
+          (v && reUrl.test(v) && v.length >= 5 && v.length <= 500) ||
+          'link must be the URL of the rule',
       ],
       introduction: '',
       introductionRules: [
-        (v) => {
-          if (v) {
-            return (
-              (v && v.length >= 5 && v.length <= 500) || 'Max 500 characters'
-            )
-          }
-        },
+        (v) => (v && v.length >= 5 && v.length <= 500) || 'Max 500 characters',
       ],
       submitLoading: false,
       imgLoading: false,

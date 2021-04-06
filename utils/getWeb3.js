@@ -7,7 +7,7 @@ const getWeb3 = function () {
     window.addEventListener('load', function () {
       let results
       let web3 = window.web3
-      console.log('web3.currentProvider', web3.currentProvider)
+      // console.log('web3.currentProvider', web3.currentProvider)
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (typeof web3 !== 'undefined') {
         // Use Mist/MetaMask's provider.
