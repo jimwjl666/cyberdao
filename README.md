@@ -32,6 +32,7 @@ $ yarn generate
 1. 网址：https://vuetifyjs.com/zh-Hans/
 2. 竞品网站：https://www.bakeryswap.org/
 3. 技术方案：https://sme1gyzv67.feishu.cn/docs/doccnCNYq1ZyCu551UtftylwG4d
+4. iconfont: https://icomoon.io/
 
 ## nuxt.js框架地址
 https://www.nuxtjs.cn/
