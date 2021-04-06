@@ -1,45 +1,42 @@
 <template>
   <div class="cyberx-container">
     <!-- <CyberxBack / -->
-    <h1 class="cyberx-title">Create</h1>
+    <h1 class="cyberx-title">Mint New Artwork</h1>
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-row class="artwork-image-wrap">
-        <v-col
-          cols="12"
-          md="4"
-          sm="4"
-          class="d-flex justify-center align-center"
-        >
-          <v-progress-circular
-            v-show="imgLoading"
-            indeterminate
-            class="p-absolute"
-          ></v-progress-circular>
-          <img :src="imgUrl" alt="" class="collection-img-preview" />
-        </v-col>
-        <v-col cols="12" md="8" sm="8">
+        <v-col cols="12">
           <v-row>
             <v-col cols="12"
               ><div>
                 We recommend an image of at least 400*400. Gifs work too
-              </div></v-col
-            >
-            <v-col cols="12">
-              <input
-                ref="file"
-                type="file"
-                style="display: none"
-                accept="image/png, image/gif"
-                @change="verificationPicFile(this)"
-              />
-              <v-btn
-                color="rgb(117, 77, 56)"
-                :disabled="imgLoading"
-                @click="chooseFile"
-                >Choose File
-              </v-btn>
+              </div>
+              <div>Max size:10MB</div>
+            </v-col>
+            <v-col cols="12" class="d-flex">
+              <v-progress-circular
+                v-show="imgLoading"
+                indeterminate
+                class="p-absolute"
+              ></v-progress-circular>
+              <img :src="imgUrl" alt="" class="collection-img-preview" />
             </v-col>
           </v-row>
+        </v-col>
+
+        <v-col cols="12">
+          <input
+            ref="file"
+            type="file"
+            style="display: none"
+            accept="image/png, image/gif"
+            @change="verificationPicFile(this)"
+          />
+          <v-btn
+            color="rgb(117, 77, 56)"
+            :disabled="imgLoading"
+            @click="chooseFile"
+            >Choose File
+          </v-btn>
         </v-col>
       </v-row>
       <v-alert v-show="isShowAlert" type="warning" dismissible>
@@ -188,24 +185,13 @@ export default {
       ],
       link: '',
       linkRules: [
-        (v) => {
-          if (v) {
-            return (
-              (v && reUrl.test(v) && v.length >= 5 && v.length <= 500) ||
-              'link must be the URL of the rule'
-            )
-          }
-        },
+        (v) =>
+          (v && reUrl.test(v) && v.length >= 5 && v.length <= 500) ||
+          'link must be the URL of the rule',
       ],
       introduction: '',
       introductionRules: [
-        (v) => {
-          if (v) {
-            return (
-              (v && v.length >= 5 && v.length <= 500) || 'Max 500 characters'
-            )
-          }
-        },
+        (v) => (v && v.length >= 5 && v.length <= 500) || 'Max 500 characters',
       ],
       submitLoading: false,
       imgLoading: false,
@@ -253,7 +239,14 @@ export default {
       // picUrl https://gateway.pinata.cloud/ipfs/QmRP5uqzptHXbdv9U6A7K1j87ErxqaYf94g1ynPZWBUzKS
       // call contract
     },
-    clear() {},
+    clear() {
+      this.artWorkName = ''
+      this.artistName = ''
+      this.link = ''
+      this.introduction = ''
+      this.imgUrl = ''
+      this.$refs.observer.reset()
+    },
     async mint() {
       this.IpfsHash = 'QmRP5uqzptHXbdv9U6A7K1j87ErxqaYf94g1ynPZWBUzKS'
       const contract = new this.web3Instance.eth.Contract(Abi, contractAddress)
