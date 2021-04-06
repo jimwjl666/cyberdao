@@ -12,7 +12,9 @@
       </p>
       <div class="d-flex justify-center cbd-page-home__btngroup">
         <v-btn class="mr-10 bg-white" to="/mint" large> Explore </v-btn>
-        <v-btn color="primary" to="/mint" large>Create</v-btn>
+        <v-btn v-if="web3.isConnected" color="primary" to="/mint" large
+          >Create</v-btn
+        >
       </div>
       <EcologicalPromotionPlan />
       <AboutCyberDAO />
