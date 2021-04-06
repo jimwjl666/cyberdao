@@ -40,11 +40,16 @@ export default {
   },
   computed: {
     ...mapState(['web3']),
+    computedItems() {
+      return ['creator', 'creator']
+    },
   },
   methods: {
     changTabs(index) {
       console.log(index)
-      this.$refs.tokenList.queryNfts({ [this.items[index]]: this.web3.account })
+      this.$refs.tokenList.queryNfts({
+        [this.computedItems[index]]: this.web3.account,
+      })
     },
   },
 }
