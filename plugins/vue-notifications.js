@@ -7,7 +7,7 @@ miniToastr.init()
 function toast({ title, message, type, timeout, cb }) {
   return miniToastr[type](message, title, timeout, cb)
 }
-
+Vue.prototype.$toast = miniToastr
 const options = {
   success: toast,
   error: toast,

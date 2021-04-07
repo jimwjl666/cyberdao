@@ -16,6 +16,13 @@ Vue.filter('toThousand', function (value, num) {
     return toThousands(Math.round(value))
   }
 })
+Vue.filter('toCBD', function (value) {
+  console.log('value:', value)
+  if (!value) {
+    return 0
+  }
+  return value / Math.pow(10, 18)
+})
 
 Vue.filter('toRate', function (value) {
   return toRate(value)
