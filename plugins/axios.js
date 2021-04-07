@@ -18,7 +18,6 @@ export default function ({ $axios, redirect }) {
     console.log('Making request to ' + config.url)
   })
   $axios.onResponse((response) => {
-    console.log(response.data)
     if (response.data.code === 0 || response.data.IpfsHash) {
       return response.data
     }

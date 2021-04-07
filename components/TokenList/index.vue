@@ -28,7 +28,14 @@
         </div>
         {{ item.showListBtn }}
         <div class="listbtn p-zoom justify-center align-center bg-gray">
-          <v-btn color="primary" @click.stop="showSell(item.tokenID)"
+          <v-btn
+            v-if="
+              web3.isConnected &&
+              web3.account === item.creator &&
+              item.status === 0
+            "
+            color="primary"
+            @click.stop="showSell(item.tokenID)"
             >List</v-btn
           >
         </div>
@@ -39,6 +46,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import CbdCard from '../CbdCard'
 import Sell from '../Sell'
 // import { Abi, contractAddress } from '~/contracts/testAbi'
@@ -50,6 +58,7 @@ export default {
       default: false,
     },
   },
+
   data() {
     return {
       nfts: [],
@@ -64,6 +73,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['web3']),
     isSpace() {
       return this.$route.path === '/space'
     },

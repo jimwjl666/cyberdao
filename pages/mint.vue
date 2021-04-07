@@ -151,7 +151,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { Abi, contractAddress } from '~/contracts/testAbi'
+import { nftContractAbi, nftContractAddress } from '~/contracts/nftToken'
 const reUrl = /^(((ht|f)tps?):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/
 const uploadUrl = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
 
@@ -197,7 +197,7 @@ export default {
       imgLoading: false,
       fileType: 1,
       tokenId: '',
-      contractAddress,
+      contractAddress: nftContractAddress,
     }
   },
   computed: {
@@ -248,8 +248,12 @@ export default {
       this.$refs.observer.reset()
     },
     async mint() {
-      this.IpfsHash = 'QmRP5uqzptHXbdv9U6A7K1j87ErxqaYf94g1ynPZWBUzKS'
-      const contract = new this.web3Instance.eth.Contract(Abi, contractAddress)
+      console.log('this.IpfsHash', this.IpfsHash)
+      // this.IpfsHash = 'QmRP5uqzptHXbdv9U6A7K1j87ErxqaYf94g1ynPZWBUzKS'
+      const contract = new this.web3Instance.eth.Contract(
+        nftContractAbi,
+        nftContractAddress
+      )
       const account = this.web3.account
 
       const contractRes = await contract.methods
@@ -259,7 +263,9 @@ export default {
       return this.getTopics(contractRes)
     },
     getTopics(transction) {
-      const topics = transction?.events[0]?.raw?.topics
+      const topics =
+        transction?.events[0]?.raw?.topics ||
+        transction?.events?.Transfer?.raw?.topics
       /* eslint-disable no-eval */
       return eval(topics[3]).toString(10)
     },
@@ -331,9 +337,9 @@ export default {
           image.onload = function () {
             const width = image.width
             const height = image.height
-            if (width < 400 || height < 400) {
+            if (width < 100 || height < 100) {
               file.value = ''
-              this.showUploadError({ message: '图片尺寸不符' })
+              ctx.showUploadError({ message: '图片尺寸不符' })
               return false
             }
           }

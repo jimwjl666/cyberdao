@@ -13,22 +13,16 @@
       <v-card-text>
         <v-container>
           <v-row class="mb-5">
-            <v-col cols="4">
-              <div class="cbd-sell__item disabled">
-                <h3>Set Price</h3>
-                <p>Sell at a fix or a declining price (Coming Soon)</p>
-              </div>
-            </v-col>
-            <v-col cols="4">
-              <div class="cbd-sell__item active">
-                <h3>Set Price</h3>
-                <p>Sell at a fix or a declining price (Coming Soon)</p>
-              </div>
-            </v-col>
-            <v-col cols="4">
-              <div class="cbd-sell__item disabled">
-                <h3>Set Price</h3>
-                <p>Sell at a fix or a declining price (Coming Soon)</p>
+            <v-col v-for="(item, index) in tabs" :key="index" cols="4">
+              <div
+                class="cbd-sell__item"
+                :class="{
+                  active: isActive === index,
+                  disabled: isActive !== index,
+                }"
+              >
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.content }}</p>
               </div>
             </v-col>
           </v-row>
@@ -36,13 +30,16 @@
             <v-text-field
               v-model="MinimumBid"
               :counter="50"
-              label="Minimum Bid"
-              placeholder="Set your starting bid price."
+              type="number"
+              min="0"
+              label="fix price"
+              placeholder="Set your fix price."
               :rules="MinimumBidRules"
               outlined
               shaped
+              suffix="CBD"
             ></v-text-field>
-            <v-text-field
+            <!-- <v-text-field
               v-model="ReservePrice"
               label="Reserve Price"
               placeholder="SCreate a hidden limit by setting a reserve price."
@@ -57,7 +54,7 @@
               disabled
               outlined
               shaped
-            ></v-text-field>
+            ></v-text-field> -->
           </v-form>
         </v-container>
       </v-card-text>
@@ -74,7 +71,11 @@
 import BigNumber from 'bigNumber.js'
 import { mapState } from 'vuex'
 import miniToastr from 'mini-toastr'
-import { Abi, contractAddress } from '~/contracts/testAbi'
+import { nftContractAddress, nftContractAbi } from '~/contracts/nftToken'
+import {
+  exchangeContractAbi,
+  exchangeContractAddress,
+} from '~/contracts/exchange.js'
 
 export default {
   model: {
@@ -94,14 +95,29 @@ export default {
     ReservePrice: '',
     ExpirationDate: '',
     MinimumBidRules: [
-      (v) => !!v || 'Minimum Bid is required',
+      (v) => !!v || 'fix price is required',
       (v) =>
         (v && v.length <= 50) || 'artWorkName must be less than 50 characters',
     ],
+    isActive: 0,
+    tabs: [
+      { title: 'Set Price', content: 'Sell at a fix or a declining price' },
+      {
+        title: 'Highest Bid',
+        content: 'Auction to the highest bidder(Coming Soon)',
+      },
+      {
+        title: 'Bundle',
+        content: 'Sell at a fix or a declining price (Coming Soon)',
+      },
+    ],
+    exchangeContract: Object.create(null),
+    nftTokenContract: Object.create(null),
   }),
   computed: {
     ...mapState(['web3', 'web3Instance']),
   },
+  mounted() {},
   methods: {
     onClose() {
       this.$emit('on-change', false)
@@ -115,20 +131,24 @@ export default {
       }
     },
     async onSell() {
-      const contract = new this.web3Instance.eth.Contract(Abi, contractAddress)
+      const contract = new this.web3Instance.eth.Contract(
+        nftContractAbi,
+        nftContractAddress
+      )
       const account = this.web3.account
-      console.log(this.tokenId)
 
+      // 授权交易所
       await contract.methods
-        .approve('0x129997ac388723c166a3c16bce0e1d2504cd3d2b', this.tokenId)
+        .approve(exchangeContractAddress, this.tokenId)
         .send({ from: account })
-
+      console.log(this.tokenId, '授权成功')
+      // 上架
       await this.readyToSellToken()
     },
     async readyToSellToken() {
       const contract = new this.web3Instance.eth.Contract(
-        Abi,
-        '0x129997ac388723c166a3c16bce0e1d2504cd3d2b'
+        exchangeContractAbi,
+        exchangeContractAddress
       )
       const account = this.web3.account
       const price = new BigNumber(this.MinimumBid * 10 ** 18).toString()
@@ -148,12 +168,14 @@ export default {
       }
       const { code } = await this.$api.actiontoken(params)
       if (code === 0) {
-        miniToastr.success('上架成功！')
+        miniToastr.success('Successful launch')
       } else {
-        miniToastr.error('上架失败！')
+        miniToastr.error('Failed to launch')
       }
       this.$loading.close()
       this.onClose()
+      // 更新Created
+      this.$parent.queryNfts({ creator: this.web3.account })
     },
   },
 }
@@ -164,6 +186,8 @@ export default {
   &__item {
     text-align: center;
     border: 1px solid $color-primary;
+    height: 104px;
+    cursor: pointer;
     h3 {
       padding-top: 20px;
     }
