@@ -21,7 +21,7 @@
         >
         <div v-if="web3.isConnected" class="account-btn-wrap">
           <span class="account-coins-balance"
-            >{{ web3.balance | formatEth }} ETH</span
+            >{{ web3.balance | formatEth }} BNB</span
           >
           <nuxt-link to="/space" tag="v-btn" class="account-address">
             <span>{{ simpleAddress }}</span>

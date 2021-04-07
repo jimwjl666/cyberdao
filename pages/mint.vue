@@ -315,7 +315,7 @@ export default {
       if (filePath) {
         const filePic = file.files[0]
         const hasSuffix = Object.keys(picMap).some((suffix) => {
-          return filePic.name.endsWith(`.${suffix}`)
+          return filePic.name.toLowerCase().endsWith(`.${suffix}`)
         })
         if (!hasSuffix) {
           this.showUploadError({ message: '文件类型不支持' })
@@ -323,7 +323,6 @@ export default {
         }
         const arr = filePic.name.split('.')
         this.fileType = picMap[arr[arr.length - 1]]
-        console.log(this.fileType)
         const maxFileSize = 10 * 1024
         if (filePic.size / 1024 > maxFileSize) {
           file.value = ''
